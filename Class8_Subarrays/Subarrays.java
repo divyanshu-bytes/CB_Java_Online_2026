@@ -3,12 +3,13 @@ import java.util.*;
 
 public class Subarrays{
 
-	/*
+	
 	public static void printAllSubarrays(int[] arr){
 		int n = arr.length;
 		// Print all subarrays
 		for(int i=0; i<n; i++){
 			for(int j=i; j<n; j++){
+				// i, j
 				for(int k=i; k<=j; k++){
 					System.out.print(arr[k] + " ");
 				}
@@ -17,7 +18,6 @@ public class Subarrays{
 		}
 		System.out.println();
 	}
-	*/
 
 	public static void printSubarray(int[] arr, int i, int j){
 		for(int k=i; k<=j; k++){
@@ -26,7 +26,7 @@ public class Subarrays{
 		System.out.println();
 	}
 
-	public static void printAllSubarrays(int[] arr){
+	public static void printAllSubarraysUsing2Loops(int[] arr){
 		int n = arr.length;
 		// Print all subarrays
 		for(int i=0; i<n; i++){
