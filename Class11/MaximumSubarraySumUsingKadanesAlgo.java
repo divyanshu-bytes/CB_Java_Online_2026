@@ -8,7 +8,7 @@ Input:
 
 */
 
-public class MaximumSubarraySum{
+public class MaximumSubarraySumUsingKadanesAlgo{
 
 	public static void printAllSubarrays(int[] arr){
 		int n = arr.length;
@@ -97,6 +97,21 @@ public class MaximumSubarraySum{
 		return maxSubArrSum;
 	}
 
+	public static int maximumSubarraySumUsingKadanesAlgo(int[] arr){
+		// long maxSoFar = Integer.MIN_VALUE;
+		// long maxEndingHere = Integer.MIN_VALUE;
+
+		int maxSoFar = arr[0];
+		int maxEndingHere = arr[0];
+
+		for(int i=1; i<arr.length; i++){
+			maxEndingHere = Math.max(maxEndingHere + arr[i], arr[i]);
+			maxSoFar = Math.max(maxSoFar, maxEndingHere);
+		}
+
+		return maxSoFar;
+	}
+
 	public static void main(String[] args){
 		Scanner scanner = new Scanner(System.in);
 		int n = scanner.nextInt();
@@ -109,7 +124,8 @@ public class MaximumSubarraySum{
 		}
 
 		System.out.println("Maximum Subarray Sum = " + maximumSubarraySum(arr));
-		System.out.println("Maximum Subarray Sum Optimized Way = " + maximumSubarraySumOptimized(arr));
-		System.out.println("Maximum Subarray Sum Prefix Sum = " + maximumSubarraySumUsingPrefixSum(arr));
+		System.out.println("Maximum Subarray Sum using Optimized Way = " + maximumSubarraySumOptimized(arr));
+		System.out.println("Maximum Subarray Sum using Prefix Sum = " + maximumSubarraySumUsingPrefixSum(arr));
+		System.out.println("Maximum Subarray Sum using Kadanes Algorithm = " + maximumSubarraySumUsingKadanesAlgo(arr));
 	}
 }
