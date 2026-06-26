@@ -48,6 +48,27 @@ public class ReverseStack{
 		return stk;
 	}
 
+	private static void insertAtBottom(Stack<Integer> stk, int x){
+		if(stk.isEmpty()){
+			stk.push(x);
+			return;
+		}
+
+		int top = stk.pop();
+		insertAtBottom(stk, x);
+		stk.push(top);
+	}
+
+	public static void reverseStackUsingNoExtraStack(Stack<Integer> stk){
+		if(stk.isEmpty()){
+			return;
+		}
+
+		int x = stk.pop();
+		reverseStackUsingNoExtraStack(stk);
+		insertAtBottom(stk, x);
+	}
+
 
 	public static void printStack(Stack<Integer> stk){
 		System.out.print("Top -> ");
@@ -73,7 +94,8 @@ public class ReverseStack{
 		System.out.println(" <- Top");
 		
 		// stk = reverseStackUsing2HelperStacks(stk);
-		stk = reverseStackUsing1HelperStack(stk);
+		// stk = reverseStackUsing1HelperStack(stk);
+		reverseStackUsingNoExtraStack(stk);
 		printStack(stk);
 	}
 }
