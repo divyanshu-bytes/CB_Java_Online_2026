@@ -9,7 +9,7 @@ public class NextGreaterElementToTheLeft{
 		Stack<Integer> stk = new Stack<>();
 
 		for(int i=n-1; i>=0; i--){
-			while(!stk.empty() && arr[i] > stk.peek()){
+			while(!stk.empty() && arr[i] > arr[stk.peek()]){
 				ngeLeft[stk.peek()] = arr[i];
 				stk.pop();
 			}
