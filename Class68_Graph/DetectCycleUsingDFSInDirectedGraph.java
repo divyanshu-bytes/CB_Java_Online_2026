@@ -8,33 +8,22 @@ import java.io.IOException;
 
 /*
 Enter nVertex: 
-6
+7
 Enter nEdges: 
-6
+7
 Enter Edges Data (line by line): 
-0 2 true
-0 1 
-2 3 true
-3 1 
-1 4 true
-4 5 true
+0 1 false
+1 2 false
+2 3 false
+3 4 false
+4 5 false
+5 6 false
+4 1 false
 Enter Source Vertex: 
 0
 */
 
-/*
-6
-6
-0 2 true
-0 1 
-2 3 true
-3 1 
-1 4 true
-4 5 true
-0
-*/
-
-public class DetectCycleUsingBFSInUndirectedGraph{
+public class DetectCycleUsingDFSInDirectedGraph{
 
 	public static class Edge{
 		int u;
@@ -127,60 +116,36 @@ public class DetectCycleUsingBFSInUndirectedGraph{
 		}
 	}
 
-	public static boolean detectCycleUsingDFS(List<Integer>[] adjListGraph, boolean[] visited, 
-		int node, int parentNode){
-
+	public static boolean detectCycleInDirectedGraphUsingDfsHelper(List<Integer>[] adjListGraph, int node, 
+		boolean[] visited, boolean[] curPathVisitedAncestorNodes){
+		
 		visited[node] = true;
+		curPathVisitedAncestorNodes[node] = true;
 
-		// explore neighbours
-		for(int nbr: adjListGraph[node]){
+		List<Integer> nbrs = adjListGraph[node];
+		for(int nbr: nbrs){
 			if(!visited[nbr]){
-				boolean cycleHai = detectCycleUsingDFS(adjListGraph, visited, nbr, node);
-				if(cycleHai)
+				boolean aageCycleMili = detectCycleInDirectedGraphUsingDfsHelper(adjListGraph, 
+					nbr, visited, curPathVisitedAncestorNodes);
+				if(aageCycleMili){
 					return true;
+				}
 			}
-			else if(visited[nbr] && nbr != parentNode){
+			else if(curPathVisitedAncestorNodes[nbr]){
+				// nbr is already visited previously in current path -> means cycle is present
 				return true;
 			}
 		}
-
+		curPathVisitedAncestorNodes[node] = false;
 		return false;
 	}
 
-	public static class Pair{
-		int node;
-		int parent;
-
-		public Pair(int node, int parent){
-			this.node = node;
-			this.parent = parent;
-		}
-	}
-
-	public static boolean detectCycleUsingBFS(List<Integer>[] adjListGraph, int src){
+	public static boolean detectCycleInDirectedGraphUsingDfs(List<Integer>[] adjListGraph, int src){
 		int nVertex = adjListGraph.length;
-		boolean[] visited = new boolean[nVertex];
-		Queue<Pair> q = new LinkedList<>();
-		q.offer(new Pair(src, -1));		// node = src, parent = -1
-		visited[src] = true;
+		boolean[] visited = new boolean[nVertex];		// by default all values false
+		boolean[] curPathVisitedAncestorNodes = new boolean[nVertex];
 
-		while(!q.isEmpty()){
-			Pair frontPair = q.poll();
-			int node = frontPair.node;
-			int parent = frontPair.parent;
-
-			for(int nbr: adjListGraph[node]){
-				if(!visited[nbr]){
-					q.offer(new Pair(nbr, node));
-					visited[nbr] = true;
-				}
-				else if(nbr != parent){
-					// nbr is visited and nbr is also not parent
-					return true;
-				}
-			}
-		}
-		return false;
+		return detectCycleInDirectedGraphUsingDfsHelper(adjListGraph, src, visited, curPathVisitedAncestorNodes);
 	}
 
 	public static void main(String[] args) throws IOException{	
@@ -214,28 +179,15 @@ public class DetectCycleUsingBFSInUndirectedGraph{
 		System.out.println("Enter Source Vertex: ");
 		int src = Integer.parseInt(br.readLine());
 
-		boolean[] visited = new boolean[nVertex];		// by default all values false
 		List<Integer>[] adjListGraph = buildGraph(nVertex, edgeList);
 
 		printGraph(adjListGraph);
 
-		System.out.println("DFS Traversal of Graph: ");
-		dfs(adjListGraph, src, visited);
-		System.out.println();
-
-		visited = new boolean[nVertex];
-		if(detectCycleUsingDFS(adjListGraph, visited, src, -1)){
-			System.out.println("Cycle Exists in Graph using DFS");
+		if(detectCycleInDirectedGraphUsingDfs(adjListGraph, src)){
+			System.out.println("Cycle Present in Directed Graph");
 		}
 		else{
-			System.out.println("No Cycle in Graph");
-		}
-
-		if(detectCycleUsingBFS(adjListGraph, src)){
-			System.out.println("Cycle Exists in Graph using BFS");
-		}
-		else{
-			System.out.println("No Cycle in Graph");			
+			System.out.println("No Cycle Present in Directed Graph");
 		}
 
 		return;
